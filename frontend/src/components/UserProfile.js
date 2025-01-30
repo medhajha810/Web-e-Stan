@@ -11,8 +11,8 @@ const UserProfile = () => {
     });
 
     const staticUser = {
-        name: 'Demo User',
-        email: 'demo@example.com',
+        name: 'Golu kumar',
+        email: 'medhajha810@gmail.com',
         points: 100,
         donationsCount: 5,
         volunteerHours: 12,
