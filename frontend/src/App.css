@@ -1,38 +1,250 @@
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+/* App container */
 .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+}
+
+/* Header styles */
+.App-header {
+  background-color: #282c34;
+  color: white;
+  padding: 1rem;
+  height: 60px;
+  display: flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+}
+
+.App-header h1 {
+  margin: 0;
+  font-size: 2.5rem;
+  font-weight: 400;
+}
+
+/* Main content layout */
+.main-content {
+  display: flex;
+  margin-top: 60px; /* Header height */
+  height: calc(100vh - 60px);
+}
+
+/* Map wrapper */
+.map-wrapper {
+  width: 50%;
+  height: 100%;
+  position: fixed;
+  left: 0;
+  top: 60px; /* Header height */
+}
+
+/* Map container */
+.map-container {
+  width: 100%;
+  height: 100%;
+}
+
+/* Right content area */
+.right-content {
+  width: 50%;
+  margin-left: 50%; /* Map width */
+  min-height: calc(100vh - 60px);
+  background-color: #f5f5f5;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Navigation - Updated for full width */
+nav {
+  background-color: #1a1a1a;
+  padding: 1rem;
+  position: fixed;
+  width: 100%;
+  top: 60px; /* Below header */
+  left: 0;
+  z-index: 999;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+nav li {
+  flex: 1;
+  max-width: 200px;
+  text-align: center;
+}
+
+nav a {
   color: white;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+  display: block;
+  width: 100%;
 }
 
-.App-link {
-  color: #61dafb;
+nav a:hover {
+  background-color: #333;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+nav a.active {
+  background-color: #007bff;
+}
+
+/* Adjusted content wrapper for fixed nav */
+.content-wrapper {
+  padding: 2rem;
+  flex: 1;
+  overflow-y: auto;
+  margin-top: 60px; /* Height of nav */
+}
+
+/* Welcome content */
+.welcome-content {
+  text-align: center;
+  padding: 2rem;
+}
+
+.welcome-content h1 {
+  margin-bottom: 1rem;
+  color: #280d68;
+}
+
+/* Gamification styles */
+.gamification-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.gamification-container h2 {
+  color: #333;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.gamification-container h3 {
+  color: #444;
+  margin: 1rem 0;
+}
+
+.stats-section {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+
+.achievements-section,
+.rewards-section {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+
+.progress-bar {
+  margin: 15px 0;
+}
+
+/* Leaderboard styles */
+.leaderboard-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.leaderboard-container h2 {
+  color: #333;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.leaderboard-container ul {
+  list-style: none;
+  padding: 0;
+}
+
+.leaderboard-container li {
+  background-color: white;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .main-content {
+    flex-direction: column;
   }
-  to {
-    transform: rotate(360deg);
+
+  .map-wrapper {
+    position: relative;
+    width: 100%;
+    height: 50vh;
+    top: 0;
+  }
+
+  .right-content {
+    width: 100%;
+    margin-left: 0;
+    min-height: auto;
+  }
+
+  nav {
+    position: relative;
+    top: 0;
+  }
+
+  nav ul {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  nav li {
+    width: 100%;
+    max-width: none;
+  }
+
+  .content-wrapper {
+    margin-top: 0;
+    padding: 1rem;
+  }
+
+  .gamification-container,
+  .leaderboard-container {
+    padding: 10px;
   }
 }
