@@ -4,6 +4,7 @@ import Map from './components/Map';
 import UserProfile from './components/UserProfile';
 import Leaderboard from './components/Leaderboard';
 import Gamification from './components/Gamification';
+import ContactUs from './components/ContactUs';
 import './App.css';
 
 function App() {
@@ -22,13 +23,14 @@ function App() {
 
           {/* Right side - Navigation and Content */}
           <div className="right-content">
-            <div className = "navbar ">
+            <div className="navbar">
             <nav>
               <ul>
                 <li><Link to="/">Home</Link></li>
                 <li><Link to="/profile">Profile</Link></li>
                 <li><Link to="/leaderboard">Leaderboard</Link></li>
                 <li><Link to="/gamification">Gamification</Link></li>
+                <li><Link to="/contact">Contact Us</Link></li>
               </ul>
             </nav>
             </div>
@@ -38,10 +40,11 @@ function App() {
                 <Route path="/profile" element={<UserProfile />} />
                 <Route path="/leaderboard" element={<Leaderboard />} />
                 <Route path="/gamification" element={<Gamification />} />
+                <Route path="/contact" element={<ContactUs />} />
                 <Route path="/" element={
                   <div className="welcome-content">
                     <h1>"Every bite counts—stop wasting, start sharing!"</h1>
-                    <h3>"Your leftovers could be someone’s next meal."</h3>
+                    <h3>"Your leftovers could be someone's next meal."</h3>
                     <p>Join us in saving food, saving money, and saving the planet.</p>
                   </div>
                 } />

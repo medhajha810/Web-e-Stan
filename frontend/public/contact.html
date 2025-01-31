@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        textarea {
+            min-height: 100px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            display: none;
+        }
+        .success {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .error {
+            background-color: #f44336;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h2>Contact Us</h2>
+    
+    <div id="statusMessage" class="status"></div>
+
+    <form id="contactForm">
+        <div class="form-group">
+            <label for="name">Name: *</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email: *</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+
+        <div class="form-group">
+            <label for="phone">Phone:</label>
+            <input type="tel" id="phone" name="phone">
+        </div>
+
+        <div class="form-group">
+            <label for="purpose">Purpose: *</label>
+            <select id="purpose" name="purpose" required>
+                <option value="donate">I want to donate</option>
+                <option value="volunteer">I want to volunteer</option>
+                <option value="receive">I need food assistance</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Preferred Contact Method: *</label>
+            <div>
+                <label style="display: inline;">
+                    <input type="radio" name="preferredContact" value="email" checked> Email
+                </label>
+                <label style="display: inline; margin-left: 20px;">
+                    <input type="radio" name="preferredContact" value="phone"> Phone
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="message">Message: *</label>
+            <textarea id="message" name="message" required></textarea>
+        </div>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const statusDiv = document.getElementById('statusMessage');
+            statusDiv.style.display = 'block';
+            statusDiv.textContent = 'Submitting...';
+            statusDiv.className = 'status';
+
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                purpose: document.getElementById('purpose').value,
+                preferredContact: document.querySelector('input[name="preferredContact"]:checked').value,
+                message: document.getElementById('message').value
+            };
+
+            try {
+                // Submit to Node.js backend
+                const nodeResponse = await fetch('http://localhost:3001/api/contacts', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                // Submit to PHP backend (now through Node.js server)
+                const phpFormData = new FormData();
+                Object.entries(formData).forEach(([key, value]) => {
+                    phpFormData.append(key, value);
+                });
+
+                const phpResponse = await fetch('http://localhost:3001/submit.php', {
+                    method: 'POST',
+                    body: phpFormData
+                });
+
+                const [nodeData, phpData] = await Promise.all([
+                    nodeResponse.json(),
+                    phpResponse.json()
+                ]);
+
+                if (nodeData.success && phpData.success) {
+                    statusDiv.textContent = 'Form submitted successfully!';
+                    statusDiv.className = 'status success';
+                    this.reset();
+                    
+                    // Log the form data to console
+                    console.log('=== Form Submission Data ===');
+                    console.log('Timestamp:', new Date().toLocaleString());
+                    console.log('Form Data:', formData);
+                    console.log('Node.js Response:', nodeData);
+                    console.log('PHP Response:', phpData);
+                    console.log('==========================');
+                } else {
+                    throw new Error(nodeData.message || phpData.message || 'Failed to submit form');
+                }
+            } catch (error) {
+                statusDiv.textContent = error.message || 'An error occurred. Please try again.';
+                statusDiv.className = 'status error';
+                
+                // Log error to console
+                console.error('=== Form Submission Error ===');
+                console.error('Timestamp:', new Date().toLocaleString());
+                console.error('Error:', error);
+                console.error('Form Data:', formData);
+                console.error('==========================');
+            }
+
+            // Hide status message after 5 seconds
+            setTimeout(() => {
+                statusDiv.style.display = 'none';
+            }, 5000);
+        });
+    </script>
+</body>
+</html>
